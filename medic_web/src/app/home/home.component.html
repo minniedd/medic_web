@@ -1,5 +1,5 @@
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <button class="btn btn-primary me-md-2" type="button">ADD USER</button>
+  <button class="btn btn-primary me-md-2" type="button" (click)="openModal()">ADD USER</button>
   <button (click)="logout()" class="btn btn-primary" type="button">LOG OUT</button>
 </div>
 
@@ -19,8 +19,112 @@
       <td>{{ user.name }}</td>
       <td>{{ user.username }}</td>
       <td>{{ user.lastLoginDate | date }}</td>
-      <td><button class="btn btn-warning">View Details</button></td>
+      <td><button (click)="openDetailModal(user.id)" class="btn btn-warning">View Details</button></td>
     </tr>
   </tbody>
 </table>
+
+
+<div *ngIf="modalShow">
+  <div class="modal fade show" id="exampleModalLive" tabindex="-1" aria-labelledby="exampleModalLiveLabel" aria-modal="true" role="dialog" style="display: block;">
+    <div class="modal-dialog">
+      <div class="modal-content custom-modal">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLiveLabel">Add User</h1>
+          <button style="border: none; background-color: white; font-weight: bolder" class="btn-close" data-bs-dismiss="modal" (click)="close()" aria-label="Close">X
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="saveUser()">
+            <div>
+              <label class="form-label">Username:</label>
+              <input class="form-control" [(ngModel)]="addUsers.username" name="username" required>
+            </div>
+            <div>
+              <label class="form-label">Password:</label>
+              <input type="password" class="form-control" [(ngModel)]="addUsers.password" name="password" required>
+            </div>
+            <div>
+              <label class="form-label">Name:</label>
+              <input class="form-control" [(ngModel)]="addUsers.name" name="name" required>
+            </div>
+            <div>
+              <label class="form-label">Orders (0-10):</label>
+              <input type="number" class="form-control" [(ngModel)]="addUsers.orders" name="orders" min="0" max="10" required>
+            </div>
+            <div>
+              <label class="form-label">Image URL:</label>
+              <input class="form-control" [(ngModel)]="addUsers.imageUrl" name="imageUrl">
+            </div>
+            <div>
+              <label class="form-label">Date of Birth:</label>
+              <input type="date" class="form-control" [(ngModel)]="addUsers.birthDate" name="birthDate">
+            </div>
+            <div class="mt-3">
+              <button type="button" class="btn btn-secondary" (click)="close()" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<div *ngIf="detailsShow">
+  <div class="modal fade show" id="userDetailsModal" tabindex="-1" aria-labelledby="exampleModalLiveLabel" aria-modal="true" role="dialog" style="display: block;">
+    <div class="modal-dialog">
+      <div class="modal-content custom-modal">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="userDetailsModalLabel">User Details</h1>
+          <button style="border: none; background-color: white; font-weight: bolder" class="btn-close" data-bs-dismiss="modal" (click)="close()" aria-label="Close">X
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="changeUserDetails()">
+            <div>
+              <label class="form-label">ID:</label>
+              <input class="form-control" [value]="detailsUser.id" disabled>
+            </div>
+            <div>
+              <label class="form-label">Name:</label>
+              <input class="form-control" [(ngModel)]="detailsUser.name" name="name" required>
+            </div>
+            <div>
+              <label class="form-label">Username:</label>
+              <input class="form-control" [(ngModel)]="detailsUser.username" name="username" required>
+            </div>
+            <div>
+              <label class="form-label">Orders (0-10):</label>
+              <input type="number" class="form-control" [(ngModel)]="detailsUser.orders" name="orders" min="0" max="10" required>
+            </div>
+            <div>
+              <label class="form-label">Image URL:</label>
+              <input class="form-control" [(ngModel)]="detailsUser.imageUrl" name="imageUrl">
+            </div>
+            <div>
+              <label class="form-label">Date of Birth:</label>
+              <input type="date" class="form-control" [(ngModel)]="detailsUser.birthDate" name="birthDate">
+            </div>
+            <div>
+              <label class="form-label">Last Login Date:</label>
+              <input class="form-control" [value]="detailsUser.lastLoginDate" disabled>
+            </div>
+            <div>
+              <label class="form-label">Status:</label>
+              <input class="form-control" [(ngModel)]="detailsUser.status" name="status">
+            </div>
+            <div class="mt-3">
+              <button type="button" class="btn btn-secondary" (click)="close()" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Block</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 

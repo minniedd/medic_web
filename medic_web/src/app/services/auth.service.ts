@@ -11,7 +11,7 @@ export class AuthService {
   }
 
   public login(user: User):Observable<string> {
-    let url = MyConfig.server_address + "/api/AuthEndpoint/login"
+    let url = MyConfig.server_address + "/user/AuthEndpoint/login"
 
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
@@ -19,7 +19,7 @@ export class AuthService {
   }
 
   public logout():Observable<string> {
-    let url = MyConfig.server_address + "/api/AuthEndpoint/logout"
+    let url = MyConfig.server_address + "/user/AuthEndpoint/logout"
 
     return this.httpClient.post<string>(url, {}, { responseType: 'text' as 'json'}).pipe(catchError(this.handleError));
   }

@@ -1,15 +1,13 @@
-<div class="login-container">
+<div style="text-align: center; margin-top: 100px;" class="login-container">
   <h1>LOGIN</h1>
-  <div>
-    <label for="username">Username</label>
-    <input [(ngModel)]="user.username" type="text" name="username" id="username" required>
+  <div style="margin-bottom: 10px">
+    <input style="border-radius: 10px; border: 1px solid darkgrey; padding: 5px; font-size: medium;" [(ngModel)]="user.username" type="text" name="username" id="username" placeholder="username" required>
   </div>
   <div>
-    <label for="password">Password</label>
-    <input [(ngModel)]="user.password" type="password" name="password" id="password" required>
+    <input style="border-radius: 10px; border: 1px solid darkgrey; padding: 5px; font-size: medium;" [(ngModel)]="user.password" type="password" name="password" id="password" placeholder="password" required>
   </div>
-  <div *ngIf="errorMessage" class="error-message">
+  <div style="color: red" *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
   </div>
-  <button (click)="login(user)">LOGIN</button>
+  <button style="margin-top: 50px; border: none; background-color: coral; padding: 10px; color: white; border-radius: 10px" (click)="login(user)">LOGIN</button>
 </div>
