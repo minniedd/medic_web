@@ -1,5 +1,5 @@
 import {MyBaseService} from "../helpers/My-Base-Service";
-import {AddUserRequest} from "../models/add-user-request";
+import {AddUserRequest} from "../models/add/add-user-request";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {MyConfig} from "../helpers/My-Config";

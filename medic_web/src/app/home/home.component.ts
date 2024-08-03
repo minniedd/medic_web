@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {GetAllResponseUser} from "../models/get-all-response";
+import {GetAllResponseUser} from "../models/get all/get-all-response";
 import {GetAllService} from "../services/get-all.service";
 import {AuthService} from "../services/auth.service";
 import { Router } from "@angular/router";
 import {AddUserService} from "../services/add-user.service";
-import {AddUserRequest} from "../models/add-user-request";
-import {GetAllUserDetailsResponse} from "../models/get-all-user-details.response";
-import {UserDetailsService} from "../services/user-details.service";
-import {UpdateDetailsRequest} from "../models/update-details.request";
+import {AddUserRequest} from "../models/add/add-user-request";
 import {MyConfig} from "../helpers/My-Config";
 import {HttpClient} from "@angular/common/http";
-import {UpdateDetailsResponse} from "../models/update-details.response";
 
 @Component({
   selector: 'app-home',
@@ -31,32 +27,13 @@ export class HomeComponent implements OnInit {
   };
   modalShow: boolean = false;
   detailsShow: boolean = false;
-  selectedID:number=0;
-  detailsUser: GetAllUserDetailsResponse = {
-    id:0,
-    name: '',
-    username: '',
-    orders:0,
-    lastLoginDate: '',
-    imageUrl: '',
-    status: '',
-    birthDate: ''
-  };
-  updateDetailsRequest: UpdateDetailsRequest = {
-      id: this.detailsUser.id,
-      name: this.detailsUser.name,
-      username: this.detailsUser.username,
-      orders: this.detailsUser.orders,
-      imageUrl: this.detailsUser.imageUrl,
-      birthDate: this.detailsUser.birthDate
-    };
+  selectedUser: any;
 
   constructor(private getAllService:GetAllService,
               private authService:AuthService,
               private router:Router,
               private addUserService:AddUserService,
-              private getAllUserDetailsService: UserDetailsService,
-              private updateDetailsService:UserDetailsService) { }
+              private httpClient:HttpClient) { }
 
   ngOnInit(): void {
     this.getAllService.obradi().subscribe(x=>{
@@ -97,28 +74,32 @@ export class HomeComponent implements OnInit {
         this.modalShow = true;
     }
 
-  openDetailModal(id: number) {
-      this.selectedID = id;
-      this.getAllUserDetailsService.obradi({id: this.selectedID}).subscribe(x=>{
-        this.detailsUser = x;
-        this.updateDetailsRequest.id = this.detailsUser.id;
+  fetchDetails(userId: number): void {
+    this.httpClient.get(`${MyConfig.server_address}/user/GetDetailsEndpoint?id=${userId}`).subscribe({
+      next: (response: any) => {
+        this.selectedUser = response;
         this.detailsShow = true;
-      });
+      },
+      error: (err) => {
+        console.error("error while fetching user details", err);
+      }
+    });
   }
 
-  changeUserDetails() {
-      console.log('Update Details Request:', this.updateDetailsRequest);
-      this.updateDetailsService.obradi(this.updateDetailsRequest).subscribe(
-        (response:UpdateDetailsResponse) => {
-              console.log('Update Response:', response);
-              this.detailsUser = response;
-              this.close();
-          },
-          error => {
-              console.error('Error while updating user', error);
-          }
-      );
+  Save() {
+    this.httpClient.post(MyConfig.server_address + "/user/UpdateDetailsEndpoint/Update",this.selectedUser).subscribe(((x:any)=>{
+    }))
   }
 
-
+  blockUser(id:number) {
+    this.httpClient.post(`${MyConfig.server_address}/user/BlockUserEndpoint/${id}`, {}).subscribe({
+      next: (response: any) => {
+        alert(response.message);
+        this.fetchDetails(id);
+      },
+      error: (err) => {
+        console.error("error while blocking user", err);
+      }
+    });
+  }
 }

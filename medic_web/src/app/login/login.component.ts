@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   user: User = { username: '', password: '' };
   errorMessage: string | null = null;
+  loading: boolean = false;
   constructor(private authService:AuthService, private router:Router) { }
 
   ngOnInit(): void {
@@ -23,12 +24,17 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.loading = true;
+    this.errorMessage = null;
+
     this.authService.login(this.user).subscribe(
       token => {
         localStorage.setItem('token', token);
         this.router.navigate(['/home']);
+        this.loading = false;
       },
       error => {
+        this.loading = false;
         if (error.status === 401) {
           this.errorMessage = 'Access denied. Only admin can log in.';
         } else {
@@ -37,5 +43,4 @@ export class LoginComponent implements OnInit {
       }
     );
   }
-
 }
